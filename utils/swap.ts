@@ -1,5 +1,5 @@
-export default function swap(
-    arr: number[],
+export default function swap<T>(
+    arr: T[],
     index1: number,
     index2: number
 ): void {

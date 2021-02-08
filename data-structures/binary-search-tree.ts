@@ -1,5 +1,5 @@
 export default class BinarySearchTree<T> {
-    public root: Node<T> = null;
+    public root?: Node<T> = undefined;
 
     public insert(value: T): BinarySearchTree<T> {
         const newNode = new Node<T>(value);
@@ -12,24 +12,25 @@ export default class BinarySearchTree<T> {
             if (value < currentNode.value) {
                 if (!currentNode.left) {
                     currentNode.left = newNode;
-                    return this;
+                    break;
                 }
                 currentNode = currentNode.left;
             } else {
                 if (!currentNode.right) {
                     currentNode.right = newNode;
-                    return this;
+                    break;
                 }
                 currentNode = currentNode.right;
             }
         }
+        return this;
     }
 
     public lookup(value: T): boolean {
         if (!this.root) {
             return false;
         }
-        let currentNode = this.root;
+        let currentNode: Node<T> | undefined = this.root;
         while (currentNode) {
             if (currentNode.value === value) {
                 return true;
@@ -45,12 +46,18 @@ export default class BinarySearchTree<T> {
 
     public breadthFirstSearch(): T[] {
         let currentNode = this.root;
-        const list = [];
-        const queue = [];
+        if (!currentNode) {
+            return [];
+        }
+        const list: T[] = [];
+        const queue: Node<T>[] = [];
         queue.push(currentNode);
 
         while (queue.length > 0) {
             currentNode = queue.shift();
+            if (!currentNode) {
+                continue;
+            }
             list.push(currentNode.value);
             if (currentNode.left) {
                 queue.push(currentNode.left);
@@ -61,6 +68,10 @@ export default class BinarySearchTree<T> {
         }
         return list;
     }
+
+    public depthFirstSearch(): T[] {
+        return [];
+    }
 }
 
 class Node<T> {
@@ -69,6 +80,6 @@ class Node<T> {
     }
 
     public value: T
-    public left: Node<T>;
-    public right: Node<T>;
+    public left?: Node<T>;
+    public right?: Node<T>;
 }

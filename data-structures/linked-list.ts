@@ -1,19 +1,26 @@
+import { Result, OkResult, ErrorResult } from './../utils/result';
 
 export default class LinkedList<T> {
 
-    public head: LinkedListNode<T> = null;
-    public tail: LinkedListNode<T> = null;
+    public head?: LinkedListNode<T>;
+    public tail?: LinkedListNode<T>;
     public count = 0;
 
     constructor(value: T) {
         const node = new LinkedListNode<T>(value);
-        this.head = node;
-        this.tail = node;
-        this.count++;
+        this.addNodeToEmptyList(node);
+    }
+
+    public isEmpty(): boolean {
+        return this.count === 0;
     }
 
     public prepend(value: T): LinkedList<T> {
         const node = new LinkedListNode<T>(value, this.head);
+        if (!this.head) {
+            this.addNodeToEmptyList(node);
+            return this;
+        }
         this.head.previous = node;
         this.head = node;
         this.count++;
@@ -22,6 +29,10 @@ export default class LinkedList<T> {
 
     public append(value: T): LinkedList<T> {
         const node = new LinkedListNode<T>(value);
+        if (!this.tail) {
+            this.addNodeToEmptyList(node);
+            return this;
+        }
         node.previous = this.tail;
         this.tail.next = node;
         this.tail = node;
@@ -29,31 +40,42 @@ export default class LinkedList<T> {
         return this;
     }
 
-    public insert(value: T, index: number): LinkedList<T> {
-        this.validateIndex(index);
-
-        const node = new LinkedListNode<T>(value);
-
-        if (this.count === 0) {
-            this.head = node;
-            this.tail = node;
-            this.count++;
-            return this;
+    public insert(value: T, index: number): Result<LinkedList<T>> {
+        if (!this.indexIsInBounds(index)) {
+            return new ErrorResult('Index out of bounds!');
         }
 
-        const targetNode = this.traverseToIndex(index);
+        const node = new LinkedListNode<T>(value);
+        if (this.isEmpty()) {
+            this.addNodeToEmptyList(node);
+            return new OkResult(this);
+        }
 
-        targetNode.previous.next = node;
+        const traversalResult = this.traverseToIndex(index);
+        if (traversalResult instanceof ErrorResult) {
+            return new ErrorResult(traversalResult.error);
+        }
+        const targetNode = traversalResult.value;
+        if (!targetNode) {
+            return new ErrorResult('Could not find element!');
+        }
+        if (targetNode.previous) {
+            targetNode.previous.next = node;
+        }
         node.previous = targetNode.previous;
         node.next = targetNode;
         targetNode.previous = node;
         this.count++;
-        return this;
+        return new OkResult(this);
     }
 
-    public remove(index: number): LinkedList<T> {
-        this.validateIndex(index);
-        const nodeToDelete = this.traverseToIndex(index);
+    public remove(index: number): Result<LinkedList<T>> {
+
+        const traversalResult = this.traverseToIndex(index);
+        if (traversalResult instanceof ErrorResult) {
+            return new ErrorResult(traversalResult.error);
+        }
+        const nodeToDelete = traversalResult.value;
         if (index === 0) {
             this.head = nodeToDelete.next;
             this.head.previous = null;
@@ -85,19 +107,35 @@ export default class LinkedList<T> {
     }
 
     public getValues(): T[] {
-        const arr = [];
+        const arr: T[] = [];
         let currentNode = this.head;
-        while (currentNode !== null) {
+        while (currentNode) {
             arr.push(currentNode.value);
             currentNode = currentNode.next;
         }
         return arr;
     }
 
-    private validateIndex(index): void {
-        if (!this.indexIsInBounds(index)) {
-            throw new Error('Index out of bounds exception!');
+    private traverseToIndex(index: number): Result<LinkedListNode<T>> {
+
+        if (!this.head) {
+            return new ErrorResult('List is empty!');
         }
+        if (!this.indexIsInBounds(index)) {
+            return new ErrorResult('Invalid index!');
+        }
+
+        let counter = 0;
+        let currentNode = this.head;
+
+        while (counter < index) {
+            if (!currentNode.next) {
+                return new OkResult(currentNode);
+            }
+            currentNode = currentNode.next;
+            counter++;
+        }
+        return new OkResult(currentNode);
     }
 
     private indexIsInBounds(index: number): boolean {
@@ -105,29 +143,23 @@ export default class LinkedList<T> {
             || index === 0;
     }
 
-    private traverseToIndex(index: number): LinkedListNode<T> {
-        let counter = 0;
-        let currentNode = this.head;
-
-        while (counter < index) {
-            currentNode = currentNode.next;
-            counter++;
-        }
-        return currentNode;
+    private addNodeToEmptyList(node: LinkedListNode<T>): void {
+        this.head = node;
+        this.tail = node;
+        this.count++;
     }
-
 }
 
 export class LinkedListNode<T> {
 
     public value: T;
-    public next: LinkedListNode<T>;
-    public previous: LinkedListNode<T>;
+    public next?: LinkedListNode<T>;
+    public previous?: LinkedListNode<T>;
 
     constructor(
         value: T,
-        next: LinkedListNode<T> = null,
-        previous: LinkedListNode<T> = null
+        next?: LinkedListNode<T>,
+        previous?: LinkedListNode<T>
     ) {
         this.value = value;
         this.next = next;

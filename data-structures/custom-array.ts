@@ -1,8 +1,12 @@
 
-export default class Array2<T> {
+interface ICustomArrayData<T> {
+    [key: number]: T
+}
+
+export default class CustomArray<T> {
 
     public length = 0;
-    public data = {};
+    public data: ICustomArrayData<T> = {};
 
     // O(1)
     public get(index: number): T {
@@ -10,7 +14,7 @@ export default class Array2<T> {
     }
 
     // O(1)
-    public push(value: T): Array2<T> {
+    public push(value: T): CustomArray<T> {
         this.data[this.length] = value;
         this.length++;
         return this;
@@ -18,14 +22,15 @@ export default class Array2<T> {
 
     // O(1)
     public pop(): T {
-        const last = this.data[this.length - 1];
-        delete this.data[this.length - 1];
+        const lastIndex = this.length - 1;
+        const lastElement = this.data[lastIndex];
+        delete this.data[lastIndex];
         this.length--;
-        return last;
+        return lastElement;
     }
 
     // O(n)
-    public insert(value: T, index: number): Array2<T> {
+    public insert(value: T, index: number): CustomArray<T> {
         this.shiftElementsRightStartingAtIndex(index);
         this.data[index] = value;
         return this;

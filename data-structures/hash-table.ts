@@ -21,11 +21,11 @@ export default class HashTable<K, V> {
     }
 
     // O(1)
-    public get(key: K): V {
+    public get(key: K): V | undefined {
         const idx = this.hash(key);
         const bucket = this.data[idx];
         if (!bucket) {
-            return null;
+            return undefined;
         }
         if (bucket.count === 1 && bucket[0][0] === key) {
             return bucket[0][1];
@@ -35,12 +35,12 @@ export default class HashTable<K, V> {
                 return bucket[i][1];
             }
         }
-        return null;
+        return undefined;
     }
 
     // O(n)
     public keys(): K[] {
-        const keysArray = [];
+        const keysArray: K[] = [];
         for (let i = 0; i < this.data.length; ++i) {
             if (!this.data[i]) {
                 continue;
@@ -54,7 +54,7 @@ export default class HashTable<K, V> {
 
     // O(1)
     private hash(key: K): number {
-        const keyString = key.toString();
+        const keyString = new String(key);
         let hash = 0;
         for (let i = 0; i < keyString.length; ++i) {
             hash = (hash + keyString.charCodeAt(i) * i) % this.data.length;

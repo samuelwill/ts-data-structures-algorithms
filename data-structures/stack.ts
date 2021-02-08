@@ -1,11 +1,12 @@
 
+import { ErrorResult, OkResult, Result } from '../utils/result';
 import { LinkedListNode } from './linked-list';
 
 // linked list implementation
 export default class Stack<T> {
 
-    public top: LinkedListNode<T> = null;
-    public bottom: LinkedListNode<T> = null;
+    public top?: LinkedListNode<T> = undefined;
+    public bottom?: LinkedListNode<T> = undefined;
     public count = 0;
 
     public push(data: T): Stack<T> {
@@ -23,23 +24,23 @@ export default class Stack<T> {
         return this;
     }
 
-    public pop(): LinkedListNode<T> {
+    public pop(): Result<LinkedListNode<T>> {
         if (!this.top) {
-            return null;
+            return new ErrorResult('Stack is empty!');
         }
         const previousTop = this.top;
         if (this.top === this.bottom) {
-            this.bottom = null;
+            this.bottom = undefined;
         }
         this.top = this.top.next;
         this.count--;
-        return previousTop;
+        return new OkResult(previousTop);
     }
 
-    public peek(): T {
+    public peek(): Result<T> {
         if (!this.top) {
-            return null;
+            return new ErrorResult('Stack is empty!');
         }
-        return this.top.value;
+        return new OkResult(this.top.value);
     }
 }
