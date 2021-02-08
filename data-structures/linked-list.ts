@@ -7,9 +7,11 @@ export default class LinkedList<T> {
     public tail?: LinkedListNode<T>;
     public count = 0;
 
-    constructor(value: T) {
-        const node = new LinkedListNode<T>(value);
-        this.addNodeToEmptyList(node);
+    constructor(value?: T) {
+        if (value) {
+            const node = new LinkedListNode<T>(value);
+            this.addNodeToEmptyList(node);
+        }
     }
 
     // O(1)
@@ -72,7 +74,7 @@ export default class LinkedList<T> {
     }
 
     // O(n)
-    public remove(index: number): Result<LinkedList<T>> {
+    public remove(index: number): Result<LinkedListNode<T>> {
 
         const traversalResult = this.traverseToIndex(index);
         if (traversalResult instanceof ErrorResult) {
@@ -95,7 +97,7 @@ export default class LinkedList<T> {
         }
 
         this.count--;
-        return new OkResult(this);
+        return new OkResult(nodeToDelete);
     }
 
     // O(n)
@@ -126,7 +128,7 @@ export default class LinkedList<T> {
     }
 
     // O(n)
-    private traverseToIndex(index: number): Result<LinkedListNode<T>> {
+    public traverseToIndex(index: number): Result<LinkedListNode<T>> {
 
         if (!this.head) {
             return new ErrorResult(Messages.EmptyList);

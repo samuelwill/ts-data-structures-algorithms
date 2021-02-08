@@ -1,4 +1,5 @@
 
+import { Messages } from '../utils/messages';
 import { ErrorResult, OkResult, Result } from '../utils/result';
 import { LinkedListNode } from './linked-list';
 
@@ -26,7 +27,7 @@ export default class Stack<T> {
 
     public pop(): Result<LinkedListNode<T>> {
         if (!this.top) {
-            return new ErrorResult('Stack is empty!');
+            return new ErrorResult(Messages.EmptyStack);
         }
         const previousTop = this.top;
         if (this.top === this.bottom) {
@@ -39,7 +40,7 @@ export default class Stack<T> {
 
     public peek(): Result<T> {
         if (!this.top) {
-            return new ErrorResult('Stack is empty!');
+            return new ErrorResult(Messages.EmptyStack);
         }
         return new OkResult(this.top.value);
     }
