@@ -1,4 +1,5 @@
-import { Result, OkResult, ErrorResult } from './../utils/result';
+import { Messages } from '../utils/messages';
+import { Result, OkResult, ErrorResult } from '../utils/result';
 
 export default class LinkedList<T> {
 
@@ -46,7 +47,7 @@ export default class LinkedList<T> {
     // O(n)
     public insert(value: T, index: number): Result<LinkedList<T>> {
         if (!this.indexIsInBounds(index)) {
-            return new ErrorResult('Index out of bounds!');
+            return new ErrorResult(Messages.IndexOutOfBounds);
         }
 
         const node = new LinkedListNode<T>(value);
@@ -128,10 +129,10 @@ export default class LinkedList<T> {
     private traverseToIndex(index: number): Result<LinkedListNode<T>> {
 
         if (!this.head) {
-            return new ErrorResult('List is empty!');
+            return new ErrorResult(Messages.EmptyList);
         }
         if (!this.indexIsInBounds(index)) {
-            return new ErrorResult('Invalid index!');
+            return new ErrorResult(Messages.IndexOutOfBounds);
         }
 
         let counter = 0;

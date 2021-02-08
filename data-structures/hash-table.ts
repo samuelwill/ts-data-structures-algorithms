@@ -1,4 +1,6 @@
 import KeyValuePair from '../utils/key-value-pair';
+import { Messages } from '../utils/messages';
+import { ErrorResult, OkResult, Result } from '../utils/result';
 import LinkedList from './linked-list';
 
 export default class HashTable<K, V> {
@@ -11,48 +13,48 @@ export default class HashTable<K, V> {
 
     // O(1)
     public set(key: K, value: V): void {
-        const idx = this.hash(key);
+        const index = this.hash(key);
         const pair = new KeyValuePair(key, value);
-        if (!this.data[idx]) {
-            this.data[idx] = new LinkedList<KeyValuePair<K, V>>(pair);
+        if (!this.data[index]) {
+            this.data[index] = new LinkedList<KeyValuePair<K, V>>(pair);
         } else {
-            this.data[idx].append(pair);
+            this.data[index].append(pair);
         }
     }
 
     // O(1)
-    public get(key: K): V | undefined {
-        const idx = this.hash(key);
-        const bucket = this.data[idx];
+    public get(key: K): Result<V> {
+        const index = this.hash(key);
+        const bucket = this.data[index];
         if (!bucket) {
-            return undefined;
+            return new ErrorResult(Messages.NoDataForKey);
         }
-        if (bucket.count === 1 && bucket[0][0] === key) {
-            return bucket[0][1];
-        }
-        for (let i = 0; i < bucket.count; ++i) {
-            if (bucket[i][0] === key) {
-                return bucket[i][1];
+        const bucketValues = bucket.getValues();
+        for (let i = 0; i < bucketValues.length; ++i) {
+            if (bucketValues[i].key === key) {
+                return new OkResult(bucketValues[i].value);
             }
         }
-        return undefined;
+        return new ErrorResult(Messages.NoDataForKey);
     }
 
     // O(n)
     public keys(): K[] {
         const keysArray: K[] = [];
         for (let i = 0; i < this.data.length; ++i) {
-            if (!this.data[i]) {
+            const bucket = this.data[i];
+            if (!bucket) {
                 continue;
             }
-            for (let j = 0; j < this.data[i].count; ++j) {
-                keysArray.push(this.data[i][j][0]);
+            const bucketValues = bucket.getValues();
+            for (let j = 0; j < bucketValues.length; ++j) {
+                keysArray.push(bucketValues[j].key);
             }
         }
         return keysArray;
     }
 
-    // O(1)
+    // O(n)
     private hash(key: K): number {
         const keyString = new String(key);
         let hash = 0;

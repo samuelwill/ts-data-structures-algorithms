@@ -1,4 +1,5 @@
 import { ErrorResult, OkResult, Result } from "../utils/result";
+import { Messages } from '../utils/messages';
 
 interface ICustomArrayData<T> {
     [key: number]: T
@@ -12,7 +13,7 @@ export default class CustomArray<T> {
     // O(1)
     public get(index: number): Result<T> {
         if (!this.indexIsInBounds(index)) {
-            return new ErrorResult('Index out of bounds!');
+            return new ErrorResult(Messages.IndexOutOfBounds);
         }
         return new OkResult(this.data[index]);
     }
@@ -36,7 +37,7 @@ export default class CustomArray<T> {
     // O(n)
     public insert(value: T, index: number): Result<CustomArray<T>> {
         if (!this.indexIsInBounds(index)) {
-            return new ErrorResult('Index out of bounds!');
+            return new ErrorResult(Messages.IndexOutOfBounds);
         }
         this.shiftElementsRightStartingAtIndex(index);
         this.data[index] = value;
@@ -46,7 +47,7 @@ export default class CustomArray<T> {
     // O(n)
     public delete(index: number): Result<T> {
         if (!this.indexIsInBounds(index)) {
-            return new ErrorResult('Index out of bounds!');
+            return new ErrorResult(Messages.IndexOutOfBounds);
         }
         const deletedElement = this.data[index];
         delete this.data[index];
