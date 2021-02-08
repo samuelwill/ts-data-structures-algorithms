@@ -1,3 +1,4 @@
+import { ErrorResult, OkResult, Result } from "../utils/result";
 
 interface ICustomArrayData<T> {
     [key: number]: T
@@ -9,8 +10,11 @@ export default class CustomArray<T> {
     public data: ICustomArrayData<T> = {};
 
     // O(1)
-    public get(index: number): T {
-        return this.data[index];
+    public get(index: number): Result<T> {
+        if (!this.indexIsInBounds(index)) {
+            return new ErrorResult('Index out of bounds!');
+        }
+        return new OkResult(this.data[index]);
     }
 
     // O(1)
@@ -30,18 +34,34 @@ export default class CustomArray<T> {
     }
 
     // O(n)
-    public insert(value: T, index: number): CustomArray<T> {
+    public insert(value: T, index: number): Result<CustomArray<T>> {
+        if (!this.indexIsInBounds(index)) {
+            return new ErrorResult('Index out of bounds!');
+        }
         this.shiftElementsRightStartingAtIndex(index);
         this.data[index] = value;
-        return this;
+        return new OkResult(this);
     }
 
     // O(n)
-    public delete(index: number): T {
+    public delete(index: number): Result<T> {
+        if (!this.indexIsInBounds(index)) {
+            return new ErrorResult('Index out of bounds!');
+        }
         const deletedElement = this.data[index];
         delete this.data[index];
         this.shiftElementsLeftStartingAtIndex(index);
-        return deletedElement;
+        return new OkResult(deletedElement);
+    }
+
+    private indexIsInBounds(index: number): boolean {
+        if (this.length === 0) {
+            return false;
+        }
+        if (index === 0) {
+            return true;
+        }
+        return index > 0 && index < this.length;
     }
 
     // O(n)

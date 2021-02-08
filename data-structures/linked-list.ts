@@ -11,10 +11,12 @@ export default class LinkedList<T> {
         this.addNodeToEmptyList(node);
     }
 
+    // O(1)
     public isEmpty(): boolean {
         return this.count === 0;
     }
 
+    // O(1)
     public prepend(value: T): LinkedList<T> {
         const node = new LinkedListNode<T>(value, this.head);
         if (!this.head) {
@@ -27,6 +29,7 @@ export default class LinkedList<T> {
         return this;
     }
 
+    // O(n)
     public append(value: T): LinkedList<T> {
         const node = new LinkedListNode<T>(value);
         if (!this.tail) {
@@ -40,6 +43,7 @@ export default class LinkedList<T> {
         return this;
     }
 
+    // O(n)
     public insert(value: T, index: number): Result<LinkedList<T>> {
         if (!this.indexIsInBounds(index)) {
             return new ErrorResult('Index out of bounds!');
@@ -55,10 +59,7 @@ export default class LinkedList<T> {
         if (traversalResult instanceof ErrorResult) {
             return new ErrorResult(traversalResult.error);
         }
-        const targetNode = traversalResult.value;
-        if (!targetNode) {
-            return new ErrorResult('Could not find element!');
-        }
+        const targetNode = traversalResult.value!;
         if (targetNode.previous) {
             targetNode.previous.next = node;
         }
@@ -69,28 +70,34 @@ export default class LinkedList<T> {
         return new OkResult(this);
     }
 
+    // O(n)
     public remove(index: number): Result<LinkedList<T>> {
 
         const traversalResult = this.traverseToIndex(index);
         if (traversalResult instanceof ErrorResult) {
             return new ErrorResult(traversalResult.error);
         }
-        const nodeToDelete = traversalResult.value;
+        const nodeToDelete = traversalResult.value!;
         if (index === 0) {
             this.head = nodeToDelete.next;
-            this.head.previous = null;
+            if (this.head) {
+                this.head.previous = undefined;
+            }
         } else if (index === (this.count - 1)) {
             this.tail = nodeToDelete.previous;
-            this.tail.next = null;
+            if (this.tail) {
+                this.tail.next = undefined;
+            }   
         } else {
-            nodeToDelete.previous.next = nodeToDelete.next;
-            nodeToDelete.next.previous = nodeToDelete.previous;
+            nodeToDelete!.previous!.next = nodeToDelete.next;
+            nodeToDelete!.next!.previous = nodeToDelete.previous;
         }
 
         this.count--;
-        return this;
+        return new OkResult(this);
     }
 
+    // O(n)
     public reverse(): LinkedList<T> {
         let currentNode = this.head;
         while (currentNode) {
@@ -106,6 +113,7 @@ export default class LinkedList<T> {
         return this;
     }
 
+    // O(n)
     public getValues(): T[] {
         const arr: T[] = [];
         let currentNode = this.head;
@@ -116,6 +124,7 @@ export default class LinkedList<T> {
         return arr;
     }
 
+    // O(n)
     private traverseToIndex(index: number): Result<LinkedListNode<T>> {
 
         if (!this.head) {
@@ -129,20 +138,19 @@ export default class LinkedList<T> {
         let currentNode = this.head;
 
         while (counter < index) {
-            if (!currentNode.next) {
-                return new OkResult(currentNode);
-            }
-            currentNode = currentNode.next;
+            currentNode = currentNode.next!;
             counter++;
         }
         return new OkResult(currentNode);
     }
 
+    // O(1)
     private indexIsInBounds(index: number): boolean {
         return (this.count > 0 && index <= this.count - 1)
             || index === 0;
     }
 
+    // O(1)
     private addNodeToEmptyList(node: LinkedListNode<T>): void {
         this.head = node;
         this.tail = node;
