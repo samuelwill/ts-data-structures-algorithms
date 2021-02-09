@@ -1,47 +1,35 @@
 
 import { Messages } from '../utils/messages';
 import { ErrorResult, OkResult, Result } from '../utils/result';
-import { LinkedListNode } from './linked-list';
+import LinkedList, { LinkedListNode } from './linked-list';
 
 // linked list implementation
 export default class Stack<T> {
 
-    public top?: LinkedListNode<T> = undefined;
-    public bottom?: LinkedListNode<T> = undefined;
-    public count = 0;
+    public data: LinkedList<T>;
+
+    constructor() {
+        this.data = new LinkedList<T>();
+    }
 
     public push(data: T): Stack<T> {
-        const node = new LinkedListNode<T>(data);
-        if (!this.top) {
-            this.top = node;
-            this.bottom = node;
-            this.count++;
-            return this;
-        }
-        const previousTop = this.top;
-        this.top = node;
-        this.top.next = previousTop;
-        this.count++;
+        this.data.prepend(data);
         return this;
     }
 
-    public pop(): Result<LinkedListNode<T>> {
-        if (!this.top) {
+    public pop(): Result<T> {
+        const result = this.data.remove(0);
+        if (!result.isValid) {
             return new ErrorResult(Messages.EmptyStack);
         }
-        const previousTop = this.top;
-        if (this.top === this.bottom) {
-            this.bottom = undefined;
-        }
-        this.top = this.top.next;
-        this.count--;
-        return new OkResult(previousTop);
+        return new OkResult(result.value!.value);
     }
 
     public peek(): Result<T> {
-        if (!this.top) {
-            return new ErrorResult(Messages.EmptyStack);
+        const result = this.data.traverseToIndex(0);
+        if (!result.isValid) {
+            return new ErrorResult(Messages.EmptyQueue);
         }
-        return new OkResult(this.top.value);
+        return new OkResult(result.value!.value);
     }
 }

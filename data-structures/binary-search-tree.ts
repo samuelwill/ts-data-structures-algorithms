@@ -1,47 +1,33 @@
+import insertionSort from "../sorting/insertion-sort";
+
 export default class BinarySearchTree<T> {
-    public root?: Node<T> = undefined;
+    public root?: Node<T>;
 
     public insert(value: T): BinarySearchTree<T> {
-        const newNode = new Node<T>(value);
-        if (!this.root) {
-            this.root = newNode;
-            return this;
-        }
-        let currentNode = this.root;
-        while (currentNode) {
-            if (value < currentNode.value) {
-                if (!currentNode.left) {
-                    currentNode.left = newNode;
-                    break;
-                }
-                currentNode = currentNode.left;
-            } else {
-                if (!currentNode.right) {
-                    currentNode.right = newNode;
-                    break;
-                }
-                currentNode = currentNode.right;
-            }
-        }
+        this.root = this.insertRecursive(value, this.root);
         return this;
     }
 
     public lookup(value: T): boolean {
-        if (!this.root) {
-            return false;
-        }
-        let currentNode: Node<T> | undefined = this.root;
-        while (currentNode) {
-            if (currentNode.value === value) {
-                return true;
-            }
-            if (currentNode.value > value) {
-                currentNode = currentNode.left;
-            } else {
-                currentNode = currentNode.right;
-            }
-        }
-        return false;
+        return this.lookupRecursive(value, this.root);
+    }
+
+    public inOrder(): T[] {
+        const values = [];
+        this.inOrderRecursive(values, this.root);
+        return values;
+    }
+
+    public preOrder(): T[] {
+        const values = [];
+        this.preOrderRecursive(values, this.root);
+        return values;
+    }
+
+    public postOrder(): T[] {
+        const values = [];
+        this.postOrderRecursive(values, this.root);
+        return values;
     }
 
     public breadthFirstSearch(): T[] {
@@ -71,6 +57,61 @@ export default class BinarySearchTree<T> {
 
     public depthFirstSearch(): T[] {
         return [];
+    }
+
+    private insertRecursive(value: T, node?: Node<T>): Node<T> {
+        // base case
+        if (!node) {
+            node = new Node<T>(value);
+            return node;
+        }
+        if (value < node.value) {
+            node.left = this.insertRecursive(value, node.left);
+        } else if (value > node.value) {
+            node.right = this.insertRecursive(value, node.right);
+        }
+        return node;
+    }
+
+    private lookupRecursive(value: T, node?: Node<T>): boolean {
+        //base case
+        if (!node) {
+            return false;
+        }
+        if (node.value === value) {
+            return true;
+        }
+        if (value < node.value) {
+            return this.lookupRecursive(value, node.left);
+        }
+        return this.lookupRecursive(value, node.right);
+    }
+
+    private inOrderRecursive(values: T[], node?: Node<T>): void {
+        if (!node) {
+            return;
+        }
+        this.inOrderRecursive(values, node.left);
+        values.push(node.value);
+        this.inOrderRecursive(values, node.right);
+    }
+
+    private preOrderRecursive(values: T[], node?: Node<T>): void {
+        if (!node) {
+            return;
+        }
+        values.push(node.value);
+        this.preOrderRecursive(values, node.left);
+        this.preOrderRecursive(values, node.right);
+    }
+
+    private postOrderRecursive(values: T[], node?: Node<T>): void {
+        if (!node) {
+            return;
+        }
+        this.postOrderRecursive(values, node.left);
+        this.postOrderRecursive(values, node.right);
+        values.push(node.value);
     }
 }
 
