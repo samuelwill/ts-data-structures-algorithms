@@ -16,7 +16,7 @@ export default function mergeSort(nums: number[]): number[] {
 }
 
 function merge(left: number[], right: number[]): number[] {
-    let sorted = [];
+    let sorted: number[] = [];
     let leftIndex = 0;
     let rightIndex = 0;
     while (leftIndex < left.length || rightIndex < right.length) {

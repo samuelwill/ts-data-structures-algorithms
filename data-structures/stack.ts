@@ -1,15 +1,23 @@
 
 import { Messages } from '../utils/messages';
 import { ErrorResult, OkResult, Result } from '../utils/result';
-import LinkedList, { LinkedListNode } from './linked-list';
+import LinkedList from './linked-list';
 
 // linked list implementation
 export default class Stack<T> {
 
-    public data: LinkedList<T>;
+    public get size(): number {
+        return this.data.count;
+    }
+
+    private data: LinkedList<T>;
 
     constructor() {
         this.data = new LinkedList<T>();
+    }
+
+    public isEmpty(): boolean {
+        return this.data.isEmpty();
     }
 
     public push(data: T): Stack<T> {

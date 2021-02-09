@@ -1,12 +1,21 @@
 import { Messages } from "../utils/messages";
 import { ErrorResult, OkResult, Result } from "../utils/result";
-import LinkedList, { LinkedListNode } from "./linked-list";
+import LinkedList from "./linked-list";
 
 export default class Queue<T> {
+    
+    public get count(): number {
+        return this.data.count;
+    }
+
     private data: LinkedList<T>;
 
     constructor() {
         this.data = new LinkedList<T>();
+    }
+
+    public isEmpty(): boolean {
+        return this.data.isEmpty();
     }
 
     public enqueue(value: T): Queue<T> {
