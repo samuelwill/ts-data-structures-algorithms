@@ -1,3 +1,4 @@
+import Queue from './queue';
 
 export default class BinarySearchTree<T> {
     public root?: Node<T>;
@@ -29,30 +30,33 @@ export default class BinarySearchTree<T> {
         return values;
     }
 
-    public breadthFirstSeachRecursive(): void {
-        return;
+    public breadthFirstSeachRecursive(): T[] {
+        const keys: T[] = [];
+        return keys;
     }
 
+    // O(n)
     public breadthFirstSearch(): T[] {
         let currentNode = this.root;
         if (!currentNode) {
             return [];
         }
         const list: T[] = [];
-        const queue: Node<T>[] = [];
-        queue.push(currentNode);
+        const queue = new Queue<Node<T>>();
+        queue.enqueue(currentNode);
 
-        while (queue.length > 0) {
-            currentNode = queue.shift();
-            if (!currentNode) {
+        while (queue.count > 0) {
+            const dequeueResult = queue.dequeue();
+            if (!dequeueResult.isValid) {
                 continue;
             }
-            list.push(currentNode.value);
+            currentNode = dequeueResult.value!;
+            list.push(currentNode.key);
             if (currentNode.left) {
-                queue.push(currentNode.left);
+                queue.enqueue(currentNode.left);
             }
             if (currentNode.right) {
-                queue.push(currentNode.right);
+                queue.enqueue(currentNode.right);
             }
         }
         return list;
@@ -62,68 +66,66 @@ export default class BinarySearchTree<T> {
         return [];
     }
 
-    private insertRecursive(value: T, node?: Node<T>): Node<T> {
-        // base case
+    private insertRecursive(key: T, node?: Node<T>): Node<T> {
         if (!node) {
-            node = new Node<T>(value);
+            node = new Node<T>(key);
             return node;
         }
-        if (value < node.value) {
-            node.left = this.insertRecursive(value, node.left);
-        } else if (value > node.value) {
-            node.right = this.insertRecursive(value, node.right);
+        if (key < node.key) {
+            node.left = this.insertRecursive(key, node.left);
+        } else if (key > node.key) {
+            node.right = this.insertRecursive(key, node.right);
         }
         return node;
     }
 
-    private lookupRecursive(value: T, node?: Node<T>): boolean {
-        //base case
+    private lookupRecursive(key: T, node?: Node<T>): boolean {
         if (!node) {
             return false;
         }
-        if (node.value === value) {
+        if (node.key === key) {
             return true;
         }
-        if (value < node.value) {
-            return this.lookupRecursive(value, node.left);
+        if (key < node.key) {
+            return this.lookupRecursive(key, node.left);
         }
-        return this.lookupRecursive(value, node.right);
+        return this.lookupRecursive(key, node.right);
     }
 
-    private inOrderRecursive(values: T[], node?: Node<T>): void {
+    private inOrderRecursive(keys: T[], node?: Node<T>): void {
         if (!node) {
             return;
         }
-        this.inOrderRecursive(values, node.left);
-        values.push(node.value);
-        this.inOrderRecursive(values, node.right);
+        this.inOrderRecursive(keys, node.left);
+        keys.push(node.key);
+        this.inOrderRecursive(keys, node.right);
     }
 
-    private preOrderRecursive(values: T[], node?: Node<T>): void {
+    private preOrderRecursive(keys: T[], node?: Node<T>): void {
         if (!node) {
             return;
         }
-        values.push(node.value);
-        this.preOrderRecursive(values, node.left);
-        this.preOrderRecursive(values, node.right);
+        keys.push(node.key);
+        this.preOrderRecursive(keys, node.left);
+        this.preOrderRecursive(keys, node.right);
     }
 
-    private postOrderRecursive(values: T[], node?: Node<T>): void {
+    private postOrderRecursive(keys: T[], node?: Node<T>): void {
         if (!node) {
             return;
         }
-        this.postOrderRecursive(values, node.left);
-        this.postOrderRecursive(values, node.right);
-        values.push(node.value);
+        this.postOrderRecursive(keys, node.left);
+        this.postOrderRecursive(keys, node.right);
+        keys.push(node.key);
     }
 }
 
 class Node<T> {
     constructor(value: T) {
-        this.value = value;
+        this.key = value;
     }
 
-    public value: T
+    public key: T
     public left?: Node<T>;
     public right?: Node<T>;
 }
