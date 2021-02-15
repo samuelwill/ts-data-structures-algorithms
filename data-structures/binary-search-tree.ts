@@ -66,6 +66,21 @@ export default class BinarySearchTree<T> {
         return [];
     }
 
+    private internalBreadthFirstSearch(keys: T[], queue: Queue<Node<T>>): void {
+        if (queue.isEmpty()) {
+            return;
+        }
+        const currentNode = queue.dequeue().value!;
+        keys.push(currentNode.key);
+        if (currentNode.left) {
+            queue.enqueue(currentNode.left);
+        }
+        if (currentNode.right) {
+            queue.enqueue(currentNode.right);
+        }
+        this.internalBreadthFirstSearch(keys, queue);
+    }
+
     private insertRecursive(key: T, node?: Node<T>): Node<T> {
         if (!node) {
             node = new Node<T>(key);
