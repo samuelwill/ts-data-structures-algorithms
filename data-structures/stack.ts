@@ -3,7 +3,6 @@ import { Messages } from '../utils/messages';
 import { ErrorResult, OkResult, Result } from '../utils/result';
 import LinkedList from './linked-list';
 
-// linked list implementation
 export default class Stack<T> {
 
     public get size(): number {

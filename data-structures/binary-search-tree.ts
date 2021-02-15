@@ -30,12 +30,6 @@ export default class BinarySearchTree<T> {
         return values;
     }
 
-    public breadthFirstSeachRecursive(): T[] {
-        const keys: T[] = [];
-        return keys;
-    }
-
-    // O(n)
     public breadthFirstSearch(): T[] {
         let currentNode = this.root;
         if (!currentNode) {
@@ -62,8 +56,8 @@ export default class BinarySearchTree<T> {
         return list;
     }
 
-    public depthFirstSearch(): T[] {
-        return [];
+    public delete(value: T): T {
+        return value;
     }
 
     private internalBreadthFirstSearch(keys: T[], queue: Queue<Node<T>>): void {
