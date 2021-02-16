@@ -121,7 +121,7 @@ export default class Graph<T> {
         if (!getVertexResult.isValid) {
             return new ErrorResult(Messages.VertexDoesNotExist);
         }
-        return getVertexResult.value!.findEdge(endVertex);
+        return new OkResult(getVertexResult.value!.findEdge(endVertex).value!);
     }
 
 }
