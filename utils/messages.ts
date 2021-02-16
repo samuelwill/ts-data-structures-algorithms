@@ -7,5 +7,6 @@ export enum Messages {
     ValueNotFound = 'Value not found!',
     EdgeNotFound = 'Graph edge not found!',
     VertexDoesNotExist = 'Vertex does not exist!',
-    EdgeDoesNotIncludeCurrentVertex = 'Edge does not include current vertex!'
+    EdgeDoesNotIncludeCurrentVertex = 'Edge does not include current vertex!',
+    EmptyArray = 'Array is empty!'
 }

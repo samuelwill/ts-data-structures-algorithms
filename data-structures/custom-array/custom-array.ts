@@ -26,12 +26,15 @@ export default class CustomArray<T> {
     }
 
     // O(1)
-    public pop(): T {
+    public pop(): Result<T> {
+        if (this.length === 0) {
+            return new ErrorResult(Messages.EmptyArray);
+        }
         const lastIndex = this.length - 1;
         const lastElement = this.data[lastIndex];
         delete this.data[lastIndex];
         this.length--;
-        return lastElement;
+        return new OkResult(lastElement);
     }
 
     // O(n)
