@@ -54,6 +54,21 @@ export default class HashTable<K, V> {
         return keysArray;
     }
 
+    public values(): V[] {
+        const valuesArray: V[] = [];
+        for (let i = 0; i < this.data.length; ++i) {
+            const bucket = this.data[i];
+            if (!bucket) {
+                continue;
+            }
+            const bucketValues = bucket.getValues();
+            for (let j = 0; j < bucketValues.length; ++j) {
+                valuesArray.push(bucketValues[j].value);
+            }
+        }
+        return valuesArray;
+    }
+
     // O(n)
     private hash(key: K): number {
         const keyString = new String(key);

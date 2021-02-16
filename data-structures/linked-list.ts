@@ -1,3 +1,4 @@
+import IComparatorCallback from '../utils/i-comparator-callback';
 import { Messages } from '../utils/messages';
 import { Result, OkResult, ErrorResult } from '../utils/result';
 
@@ -73,6 +74,20 @@ export default class LinkedList<T> {
         return new OkResult(this);
     }
 
+    public delete(value: T): Result<T> {
+        let currentNode = this.head;
+        let index = 0;
+        while (currentNode) {
+            if (currentNode.value === value) {
+                this.remove(index);
+                return new OkResult(value);
+            }
+            currentNode = currentNode.next;
+            index++;
+        }
+        return new ErrorResult(Messages.ValueNotFound);
+    }
+
     // O(n)
     public remove(index: number): Result<LinkedListNode<T>> {
 
@@ -90,7 +105,7 @@ export default class LinkedList<T> {
             this.tail = nodeToDelete.previous;
             if (this.tail) {
                 this.tail.next = undefined;
-            }   
+            }
         } else {
             nodeToDelete!.previous!.next = nodeToDelete.next;
             nodeToDelete!.next!.previous = nodeToDelete.previous;
@@ -125,6 +140,17 @@ export default class LinkedList<T> {
             currentNode = currentNode.next;
         }
         return arr;
+    }
+
+    public find(comparator: IComparatorCallback<T>): Result<T> {
+        let currentNode = this.head;
+        while (currentNode) {
+            if (comparator.callback(currentNode.value)) {
+                return new OkResult(currentNode.value);
+            }
+            currentNode = currentNode.next;
+        }
+        return new ErrorResult(Messages.ValueNotFound);
     }
 
     // O(n)
