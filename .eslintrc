@@ -11,5 +11,11 @@
     ],
     "rules": {
         "@typescript-eslint/no-non-null-assertion": "off"
+    },
+    "env": {
+        "browser": true,
+        "es6": true,
+        "jest": true,
+        "node": true
     }
 }
