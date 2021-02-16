@@ -1,5 +1,5 @@
-import { ErrorResult, OkResult, Result } from "../utils/result";
-import { Messages } from '../utils/messages';
+import { ErrorResult, OkResult, Result } from "../../utils/result";
+import { Messages } from '../../utils/messages';
 
 interface ICustomArrayData<T> {
     [key: number]: T
