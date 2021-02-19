@@ -74,9 +74,6 @@ export default class LinkedList<T> {
         if (index === 0) {
             this.head = node;
         }
-        if (index === this.count - 1) {
-            this.tail = node;
-        }
 
         this.count++;
         return new OkResult(this);

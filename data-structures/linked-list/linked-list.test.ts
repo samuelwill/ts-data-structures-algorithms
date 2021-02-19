@@ -110,4 +110,6 @@ describe('linked list', () => {
         expect(list.tail?.value).toBe(value2);
         expect(list.isEmpty()).toBe(false);
     });
+
+
 });
