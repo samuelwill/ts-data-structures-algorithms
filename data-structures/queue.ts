@@ -1,9 +1,9 @@
-import { Messages } from "../utils/messages";
-import { ErrorResult, OkResult, Result } from "../utils/result";
-import LinkedList from "./linked-list";
+import { Messages } from '../utils/messages';
+import { ErrorResult, OkResult, Result } from '../utils/result';
+import LinkedList from './linked-list/linked-list';
 
 export default class Queue<T> {
-    
+
     public get count(): number {
         return this.data.count;
     }

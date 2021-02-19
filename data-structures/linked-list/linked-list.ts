@@ -1,6 +1,6 @@
-import IComparatorCallback from '../utils/i-comparator-callback';
-import { Messages } from '../utils/messages';
-import { Result, OkResult, ErrorResult } from '../utils/result';
+import IComparatorCallback from '../../utils/i-comparator-callback';
+import { Messages } from '../../utils/messages';
+import { Result, OkResult, ErrorResult } from '../../utils/result';
 
 export default class LinkedList<T> {
 
@@ -70,6 +70,14 @@ export default class LinkedList<T> {
         node.previous = targetNode.previous;
         node.next = targetNode;
         targetNode.previous = node;
+
+        if (index === 0) {
+            this.head = node;
+        }
+        if (index === this.count - 1) {
+            this.tail = node;
+        }
+
         this.count++;
         return new OkResult(this);
     }

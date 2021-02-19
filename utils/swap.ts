@@ -6,7 +6,7 @@ export default function swap<T>(
     index1: number,
     index2: number
 ): Result<T[]> {
-    
+
     if (indexOutOfRange(arr, index1) || indexOutOfRange(arr, index2)) {
         return new ErrorResult(Messages.IndexOutOfBounds);
     }

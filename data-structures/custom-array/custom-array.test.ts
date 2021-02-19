@@ -15,6 +15,7 @@ describe('Custom array', () => {
 
     it('should be empty when first constructed', () => {
         const emptyArray = new CustomArray<string>();
+
         expect(emptyArray.length).toBe(0);
     });
 
@@ -27,17 +28,16 @@ describe('Custom array', () => {
 
     it('should add new elements to the end of the array', () => {
         const newValue = 'value';
+
         arr.push(newValue);
 
         expect(arr.length).toBe(3);
-
-        const getResult = arr.get(2);
-        expect(getResult.isValid).toBe(true);
-        expect(getResult.value).toBe(newValue);
+        expect(arr.get(2).isValid).toBe(true);
     });
 
     it('should remove elements from the end of the array', () => {
         const removeResult = arr.pop();
+
         expect(removeResult.isValid).toBe(true);
         expect(removeResult.value).toBe(string2);
         expect(arr.length).toBe(1);

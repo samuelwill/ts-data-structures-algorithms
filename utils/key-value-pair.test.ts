@@ -9,4 +9,4 @@ describe('Key value pair', () => {
         expect(pair.key).toBe(key);
         expect(pair.value).toBe(value);
     });
-})
+});
