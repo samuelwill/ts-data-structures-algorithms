@@ -58,6 +58,7 @@ export default class CustomArray<T> {
         return new OkResult(deletedElement);
     }
 
+    // O(1)
     private indexIsInBounds(index: number): boolean {
         if (this.length === 0) {
             return false;

@@ -56,6 +56,7 @@ export default class BinarySearchTree<T> {
         return list;
     }
 
+    // Todo
     public delete(value: T): T {
         return value;
     }

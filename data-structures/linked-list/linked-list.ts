@@ -33,7 +33,7 @@ export default class LinkedList<T> {
         return this;
     }
 
-    // O(n)
+    // O(1)
     public append(value: T): LinkedList<T> {
         const node = new LinkedListNode<T>(value);
         if (!this.tail) {
