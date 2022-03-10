@@ -1,10 +1,6 @@
 export default class MaxHeap {
     private values: number[] = [];
 
-    constructor() {
-
-    }
-
     public getSize(): number {
         return this.values.length;
     }

@@ -1,4 +1,4 @@
-import LinkedList, { LinkedListNode } from './linked-list'
+import LinkedList from './linked-list'
 
 describe('linked list', () => {
 
