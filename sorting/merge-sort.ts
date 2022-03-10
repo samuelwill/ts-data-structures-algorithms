@@ -1,40 +1,79 @@
 
-export default function mergeSort(nums: number[]): number[] {
-    // base case
-    if (nums.length === 1) {
-        return nums;
+export default function mergeSort(arr: number[]): void {
+    if (arr.length < 2) {
+        return;
     }
-    // split array into right and left
-    const currentIndex = Math.ceil(nums.length / 2);
-    const left = nums.slice(0, currentIndex);
-    const right = nums.slice(currentIndex);
-
-    return merge(
-        mergeSort(left),
-        mergeSort(right)
-    );
+    mergeSortRecursive(arr, 0, arr.length - 1);
 }
 
-function merge(left: number[], right: number[]): number[] {
-    let sorted: number[] = [];
-    let leftIndex = 0;
-    let rightIndex = 0;
-    while (leftIndex < left.length || rightIndex < right.length) {
-        if (leftIndex >= left.length) {
-            sorted = sorted.concat(right.slice(rightIndex));
-            break;
-        }
-        if (rightIndex >= right.length) {
-            sorted = sorted.concat(left.slice(leftIndex));
-            break;
-        }
-        if (left[leftIndex] < right[rightIndex]) {
-            sorted.push(left[leftIndex]);
-            leftIndex++
+function mergeSortRecursive(
+    arr: number[],
+    startIndex: number,
+    endIndex: number
+): void {
+    if (startIndex >= endIndex) {
+        return;
+    }
+    const middleIndex = Math.floor((startIndex + endIndex) / 2);
+
+    mergeSortRecursive(arr, startIndex, middleIndex);
+    mergeSortRecursive(arr, middleIndex + 1, endIndex);
+
+    merge(arr, startIndex, middleIndex, endIndex);
+}
+
+function merge(
+    arr: number[],
+    startIndex: number,
+    midIndex: number,
+    endIndex: number
+): void {
+    const leftArrayLength = midIndex - startIndex + 1;
+    const rightArrayLength = endIndex - midIndex;
+
+    const leftArrayCopy: number[] = [];
+    const rightArrayCopy: number[] = [];
+
+    // Make copy of left array
+    for (let i = 0; i < leftArrayLength; ++i) {
+        leftArrayCopy[i] = arr[startIndex + i];
+    }
+    // Make copy of right array
+    for (let j = 0; j < rightArrayLength; ++j) {
+        rightArrayCopy[j] = arr[midIndex + 1 + j];
+    }
+
+    let leftArrayIndex = 0;
+    let rightArrayIndex = 0;
+    let combinedArrayIndex = startIndex;
+
+    // Iterate through the copies of the left and right arrays,
+    // filling up the original array with the next smallest
+    // value on each iteration.
+    while (
+        leftArrayIndex < leftArrayLength
+        && rightArrayIndex < rightArrayLength
+    ) {
+        if (leftArrayCopy[leftArrayIndex] <= rightArrayCopy[rightArrayIndex]) {
+            arr[combinedArrayIndex] = leftArrayCopy[leftArrayIndex];
+            leftArrayIndex++;
         } else {
-            sorted.push(right[rightIndex]);
-            rightIndex++;
+            arr[combinedArrayIndex] = rightArrayCopy[rightArrayIndex];
+            rightArrayIndex++;
         }
+        combinedArrayIndex++;
     }
-    return sorted;
+    // In the case where either the left or right array has
+    // remaining elements, copy them into the originl array
+    while (leftArrayIndex < leftArrayLength) {
+        arr[combinedArrayIndex] = leftArrayCopy[leftArrayIndex];
+        leftArrayIndex++;
+        combinedArrayIndex++;
+    }
+    while (rightArrayIndex < rightArrayLength) {
+        arr[combinedArrayIndex] = rightArrayCopy[rightArrayIndex];
+        rightArrayIndex++;
+        combinedArrayIndex++
+    }
 }
+
