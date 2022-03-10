@@ -1,3 +1,4 @@
+import IndexOutOfBounds from './index-out-of-bounds';
 import { Messages } from "./messages";
 import { ErrorResult, OkResult, Result } from "./result";
 
@@ -7,7 +8,7 @@ export default function swap<T>(
     index2: number
 ): Result<T[]> {
 
-    if (indexOutOfRange(arr, index1) || indexOutOfRange(arr, index2)) {
+    if (IndexOutOfBounds(arr, index1) || IndexOutOfBounds(arr, index2)) {
         return new ErrorResult(Messages.IndexOutOfBounds);
     }
 
@@ -16,13 +17,4 @@ export default function swap<T>(
     arr[index2] = temp;
 
     return new OkResult(arr);
-}
-
-function indexOutOfRange<T>(
-    arr: T[],
-    index: number
-): boolean {
-    const maxIndex = arr.length - 1;
-    return index > maxIndex
-        || index < 0;
 }
