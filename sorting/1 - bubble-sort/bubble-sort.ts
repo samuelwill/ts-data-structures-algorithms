@@ -1,4 +1,4 @@
-import swap from '../utils/swap';
+import swap from '../../utils/swap';
 
 export default function bubbleSort(nums: number[]): number[] {
     // the loop limit is length minus 1 because our comparison

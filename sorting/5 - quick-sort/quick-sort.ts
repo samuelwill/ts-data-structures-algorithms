@@ -1,5 +1,5 @@
 
-import swap from '../utils/swap';
+import swap from '../../utils/swap';
 
 export default function quickSort(
     nums: number[],

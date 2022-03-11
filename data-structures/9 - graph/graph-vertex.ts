@@ -1,7 +1,7 @@
 import { Messages } from '../../utils/messages';
 import { ErrorResult, OkResult, Result } from '../../utils/result';
 import GraphEdge from './graph-edge';
-import LinkedList from '../linked-list/linked-list';
+import LinkedList from '../2 - linked-list/linked-list';
 
 export default class GraphVertex<T> {
 

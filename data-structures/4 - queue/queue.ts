@@ -1,11 +1,10 @@
+import { Messages } from '../../utils/messages';
+import { ErrorResult, OkResult, Result } from '../../utils/result';
+import LinkedList from '../2 - linked-list/linked-list';
 
-import { Messages } from '../utils/messages';
-import { ErrorResult, OkResult, Result } from '../utils/result';
-import LinkedList from './linked-list/linked-list';
+export default class Queue<T> {
 
-export default class Stack<T> {
-
-    public get size(): number {
+    public get count(): number {
         return this.data.count;
     }
 
@@ -19,15 +18,15 @@ export default class Stack<T> {
         return this.data.isEmpty();
     }
 
-    public push(data: T): Stack<T> {
-        this.data.prepend(data);
+    public enqueue(value: T): Queue<T> {
+        this.data.append(value);
         return this;
     }
 
-    public pop(): Result<T> {
+    public dequeue(): Result<T> {
         const result = this.data.remove(0);
         if (!result.isValid) {
-            return new ErrorResult(Messages.EmptyStack);
+            return new ErrorResult(Messages.EmptyQueue);
         }
         return new OkResult(result.value!.value);
     }

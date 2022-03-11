@@ -1,4 +1,4 @@
-import Queue from './queue';
+import Queue from '../4 - queue/queue';
 
 export default class BinarySearchTree<T> {
     public root?: Node<T>;

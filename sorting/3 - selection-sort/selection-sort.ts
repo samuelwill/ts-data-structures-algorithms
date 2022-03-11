@@ -1,4 +1,4 @@
-import swap from '../utils/swap';
+import swap from '../../utils/swap';
 
 export default function selectionSort(nums: number[]): number[] {
     for (let i = 0; i < nums.length; ++i) {

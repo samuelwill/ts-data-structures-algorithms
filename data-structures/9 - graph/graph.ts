@@ -1,6 +1,6 @@
 import { Messages } from '../../utils/messages';
 import { ErrorResult, OkResult, Result } from '../../utils/result';
-import HashTable from '../hash-table';
+import HashTable from '../5 - hash-table/hash-table';
 import GraphEdge from './graph-edge';
 import GraphVertex from './graph-vertex';
 

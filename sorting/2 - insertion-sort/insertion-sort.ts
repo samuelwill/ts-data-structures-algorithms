@@ -1,4 +1,4 @@
-import swap from '../utils/swap';
+import swap from '../../utils/swap';
 
 export default function insertionSort(nums: number[]): void {
     const length = nums.length;
