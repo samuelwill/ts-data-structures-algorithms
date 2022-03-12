@@ -1,7 +1,13 @@
-
 import swap from '../../utils/swap';
 
-export default function quickSort(
+export default function quickSort(nums: number[]): void {
+    if (!nums || nums.length < 2) {
+        return;
+    }
+    quickSortRecursive(nums, 0, nums.length - 1);
+}
+
+function quickSortRecursive(
     nums: number[],
     startIndex: number,
     endIndex: number
@@ -10,26 +16,24 @@ export default function quickSort(
         return;
     }
     const pivotIndex = partition(nums, startIndex, endIndex);
-    quickSort(nums, startIndex, pivotIndex - 1);
-    quickSort(nums, pivotIndex + 1, endIndex);
+    quickSortRecursive(nums, startIndex, pivotIndex - 1);
+    quickSortRecursive(nums, pivotIndex + 1, endIndex);
 }
 
-// rearrange elements in array around a pivot
-// an "in-place" algorithm
-// uses constant space complexity (just a temp variable)
 function partition(
     nums: number[],
-    startIndex,
-    endIndex
+    startIndex: number,
+    endIndex: number
 ): number {
     const pivot = nums[endIndex];
     let partitionIndex = startIndex;
     for (let i = startIndex; i < endIndex; ++i) {
         if (nums[i] <= pivot) {
-            swap(nums, nums[i], nums[partitionIndex]);
+            swap(nums, i, partitionIndex);
             partitionIndex++;
         }
     }
-    swap(nums, nums[partitionIndex], pivot);
+    swap(nums, partitionIndex, endIndex);
     return partitionIndex;
 }
+

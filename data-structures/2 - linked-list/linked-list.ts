@@ -1,6 +1,7 @@
 import IComparatorCallback from '../../utils/i-comparator-callback';
 import { Messages } from '../../utils/messages';
 import { Result, OkResult, ErrorResult } from '../../utils/result';
+import LinkedListNode from './linked-list-node';
 
 export default class LinkedList<T> {
 
@@ -15,39 +16,35 @@ export default class LinkedList<T> {
         }
     }
 
-    // O(1)
     public isEmpty(): boolean {
         return this.count === 0;
     }
 
-    // O(1)
     public prepend(value: T): LinkedList<T> {
         const node = new LinkedListNode<T>(value, this.head);
-        if (!this.head) {
+        if (this.isEmpty()) {
             this.addNodeToEmptyList(node);
             return this;
         }
-        this.head.previous = node;
+        this.head!.previous = node;
         this.head = node;
         this.count++;
         return this;
     }
 
-    // O(1)
     public append(value: T): LinkedList<T> {
         const node = new LinkedListNode<T>(value);
-        if (!this.tail) {
+        if (this.isEmpty()) {
             this.addNodeToEmptyList(node);
             return this;
         }
         node.previous = this.tail;
-        this.tail.next = node;
+        this.tail!.next = node;
         this.tail = node;
         this.count++;
         return this;
     }
 
-    // O(n)
     public insert(value: T, index: number): Result<LinkedList<T>> {
         if (!this.indexIsInBounds(index)) {
             return new ErrorResult(Messages.IndexOutOfBounds);
@@ -93,9 +90,7 @@ export default class LinkedList<T> {
         return new ErrorResult(Messages.ValueNotFound);
     }
 
-    // O(n)
     public remove(index: number): Result<LinkedListNode<T>> {
-
         const traversalResult = this.traverseToIndex(index);
         if (traversalResult instanceof ErrorResult) {
             return new ErrorResult(traversalResult.error);
@@ -120,7 +115,6 @@ export default class LinkedList<T> {
         return new OkResult(nodeToDelete);
     }
 
-    // O(n)
     public reverse(): LinkedList<T> {
         let currentNode = this.head;
         while (currentNode) {
@@ -136,7 +130,6 @@ export default class LinkedList<T> {
         return this;
     }
 
-    // O(n)
     public getValues(): T[] {
         const arr: T[] = [];
         let currentNode = this.head;
@@ -158,53 +151,33 @@ export default class LinkedList<T> {
         return new ErrorResult(Messages.ValueNotFound);
     }
 
-    // O(n)
-    public traverseToIndex(index: number): Result<LinkedListNode<T>> {
-
-        if (!this.head) {
+    public traverseToIndex(targetIndex: number): Result<LinkedListNode<T>> {
+        if (this.isEmpty()) {
             return new ErrorResult(Messages.EmptyList);
         }
-        if (!this.indexIsInBounds(index)) {
+        if (!this.indexIsInBounds(targetIndex)) {
             return new ErrorResult(Messages.IndexOutOfBounds);
         }
 
-        let counter = 0;
+        let currentIndex = 0;
         let currentNode = this.head;
 
-        while (counter < index) {
-            currentNode = currentNode.next!;
-            counter++;
+        while (currentIndex < targetIndex) {
+            currentNode = currentNode!.next!;
+            currentIndex++;
         }
         return new OkResult(currentNode);
     }
 
-    // O(1)
     private indexIsInBounds(index: number): boolean {
-        return (this.count > 0 && index <= this.count - 1)
-            || index === 0;
+        return this.count > 0
+            && index >= 0
+            && index < this.count;
     }
 
-    // O(1)
     private addNodeToEmptyList(node: LinkedListNode<T>): void {
         this.head = node;
         this.tail = node;
         this.count++;
-    }
-}
-
-export class LinkedListNode<T> {
-
-    public value: T;
-    public next?: LinkedListNode<T>;
-    public previous?: LinkedListNode<T>;
-
-    constructor(
-        value: T,
-        next?: LinkedListNode<T>,
-        previous?: LinkedListNode<T>
-    ) {
-        this.value = value;
-        this.next = next;
-        this.previous = previous;
     }
 }
