@@ -6,9 +6,11 @@ import LinkedList from '../2 - linked-list/linked-list';
 export default class HashTable<K, V> {
 
     public data: LinkedList<KeyValuePair<K, V>>[];
+    public size: number;
 
     constructor(size: number) {
         this.data = new Array(size);
+        this.size = 0;
     }
 
     // O(1)
@@ -20,6 +22,7 @@ export default class HashTable<K, V> {
         } else {
             this.data[index].append(pair);
         }
+        this.size++;
     }
 
     // O(1)
@@ -36,6 +39,25 @@ export default class HashTable<K, V> {
             }
         }
         return new ErrorResult(Messages.NoDataForKey);
+    }
+
+    public delete(key: K): void {
+        const index = this.hash(key);
+        const bucket = this.data[index];
+        if (!bucket) {
+            return;
+        }
+        const findResult = bucket.find({
+            callback: (pair: KeyValuePair<K, V>) => pair.key === key
+        });
+        if (findResult.isValid) {
+            bucket.delete(findResult.value!);
+            this.size--;
+        }
+    }
+
+    public has(key: K): boolean {
+        return this.get(key).isValid;
     }
 
     // O(n)

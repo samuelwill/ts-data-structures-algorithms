@@ -51,21 +51,21 @@ export default class Trie {
     private deleteHelper(
         currNode: TrieNode | undefined,
         word: string,
-        depth: number = 0
+        depth = 0
     ): TrieNode | undefined {
         if (!currNode) {
             return currNode;
         }
         // last char of the word
         if (depth === word.length) {
-            if (!currNode || this.isEmpty(currNode)) {
+            if (this.isEmpty(currNode)) {
                 return undefined;
             }
             currNode.isEndOfWord = false;
             return currNode
         }
         const index = this.getZeroIndexedCharCode(word[depth]);
-        currNode!.children[index] = this.deleteHelper(
+        currNode.children[index] = this.deleteHelper(
             currNode.children[index],
             word,
             depth + 1

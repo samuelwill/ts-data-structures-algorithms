@@ -1,7 +1,7 @@
 export default class TrieNode {
     private alphabetSize = 26;
 
-    public children: TrieNode[];
+    public children: TrieNode | undefined[];
     public isEndOfWord: boolean;
 
     constructor() {
