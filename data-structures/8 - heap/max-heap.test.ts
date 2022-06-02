@@ -24,6 +24,10 @@ describe('max heap', () => {
         heap.insert(3);
 
         expect(heap.getMax()).toBe(3);
+
+        heap.insert(4);
+
+        expect(heap.getMax()).toBe(4);
     });
 
     it('shoud support removing the max value from the heap', () => {
