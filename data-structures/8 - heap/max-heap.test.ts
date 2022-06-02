@@ -16,7 +16,6 @@ describe('max heap', () => {
         expect(heap.getSize()).toBe(3);
     });
 
-
     it('should add items and maintain max heap property', () => {
         const heap = new MaxHeap();
         heap.insert(1);
@@ -30,7 +29,7 @@ describe('max heap', () => {
         expect(heap.getMax()).toBe(4);
     });
 
-    it('shoud support removing the max value from the heap', () => {
+    it('should support removing the max value from the heap', () => {
         const heap = new MaxHeap();
         heap.insert(1);
         heap.insert(2);
