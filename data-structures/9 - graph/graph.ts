@@ -1,6 +1,6 @@
 import { Messages } from '../../utils/messages';
 import { ErrorResult, OkResult, Result } from '../../utils/result';
-import HashTable from '../5 - hash-table/hash-table';
+import HashTable from '../6 - hash-table/hash-table';
 import GraphEdge from './graph-edge';
 import GraphVertex from './graph-vertex';
 
@@ -85,6 +85,15 @@ export default class Graph<T> {
         }, 0);
     }
 
+    public getAdjacencyList(): HashTable<GraphVertex<T>, GraphVertex<T>[]> {
+        const list = new HashTable<GraphVertex<T>, GraphVertex<T>[]>(100);
+        const vertices = this.getAllVertices();
+        for (const v of vertices) {
+            list.set(v, v.getNeighbors());
+        }
+        return list;
+    }
+
     public getAdjacencyMatrix(): number[][] {
         const vertices = this.getAllVertices();
         const verticesIndices = this.getVerticesIndices();
@@ -104,6 +113,14 @@ export default class Graph<T> {
         });
         return adjacencyMatrix;
     }
+
+    // public topologicalSort(): GraphVertex<T>[] {
+    //     const list = this.getAdjacencyList();
+    //     const numberOfNodes = this.getAllVertices().length;
+    //     const order = [];
+
+    //     let i = numberOfNodes - 1;
+    // }
 
     private getVerticesIndices(): HashTable<string, number> {
         const verticesIndices = new HashTable<string, number>(10);

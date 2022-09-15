@@ -1,5 +1,7 @@
 export default class DisjointSet {
 
+    public countOfConnectedComponents: number;
+
     private representatives: number[];
     private sizes: number[];
 
@@ -9,13 +11,14 @@ export default class DisjointSet {
             this.representatives[i] = i;
         }
         this.sizes = Array(size).fill(1);
+        this.countOfConnectedComponents = size;
     }
 
     public find(vertex: number): number {
-        if (this.representatives[vertex] === vertex) {
-            return vertex;
+        let representative = vertex;
+        while (this.representatives[representative] !== representative) {
+            representative = this.representatives[representative];
         }
-        const representative = this.find(this.representatives[vertex]);
         this.representatives[vertex] = representative;
         return representative;
     }
@@ -38,5 +41,10 @@ export default class DisjointSet {
 
         this.representatives[smallerSet] = largerSet;
         this.sizes[largerSet] += this.sizes[smallerSet];
+        this.countOfConnectedComponents--;
+    }
+
+    public areConnected(vertex1: number, vertex2: number): boolean {
+        return this.find(vertex1) === this.find(vertex2);
     }
 }
